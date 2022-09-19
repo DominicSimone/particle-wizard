@@ -12,7 +12,7 @@ extends Viewport
 # Check color for # of collisions with colliders
 # Can segment texture into sections to handle multiple (but limited) colliders
 
-func readViewport():
+func readViewport() -> int:
 	var image = get_texture().get_data()
 	var hits: int = 0
 	image.lock()

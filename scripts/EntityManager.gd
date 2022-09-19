@@ -36,7 +36,7 @@ func registerGravityPoint(object: Object) -> int:
 	return gravCount - 1
 
 func particleCollisions(number: int):
-	pass
+	_entities[0].particleCollisions(number)
 
 # Called from viewports to report pixels representing collision detections
 func forwardParticleCollisions(index: int, todo_other_info: Object):
