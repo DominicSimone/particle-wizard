@@ -1,0 +1,122 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://scripts/Grav Projectile.gd" type="Script" id=1]
+
+[sub_resource type="Curve" id=28]
+max_value = 2.0
+_data = [ Vector2( 0, 1.2 ), 0.0, 1.32168, 0, 0, Vector2( 1, 0.718182 ), -0.65979, 0.0, 0, 0 ]
+
+[sub_resource type="CubeMesh" id=17]
+size = Vector3( 0.2, 0.2, 0.2 )
+
+[sub_resource type="SpatialMaterial" id=18]
+albedo_color = Color( 0.278431, 0.0352941, 0.431373, 1 )
+
+[sub_resource type="Curve" id=21]
+_data = [ Vector2( 0, 0 ), 0.0, 5.8843, 0, 0, Vector2( 0.252809, 0.965909 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.465909 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=22]
+width = 64
+curve = SubResource( 21 )
+
+[sub_resource type="ParticlesMaterial" id=23]
+emission_shape = 1
+emission_sphere_radius = 1.5
+gravity = Vector3( 0, 0, 0 )
+radial_accel = -1.0
+tangential_accel = 0.5
+scale = 1.5
+scale_curve = SubResource( 22 )
+color = Color( 0.054902, 0.00784314, 0.12549, 1 )
+
+[sub_resource type="SpatialMaterial" id=24]
+vertex_color_use_as_albedo = true
+
+[sub_resource type="PlaneMesh" id=25]
+material = SubResource( 24 )
+size = Vector2( 0.1, 0.1 )
+
+[sub_resource type="SpatialMaterial" id=26]
+flags_transparent = true
+flags_unshaded = true
+flags_do_not_receive_shadows = true
+params_specular_mode = 4
+albedo_color = Color( 0.27451, 0.14902, 0.588235, 0.368627 )
+
+[sub_resource type="SphereMesh" id=27]
+material = SubResource( 26 )
+radial_segments = 16
+rings = 8
+
+[sub_resource type="Animation" id=19]
+resource_name = "Gravity Ball"
+length = 2.0
+loop = true
+tracks/0/type = "bezier"
+tracks/0/path = NodePath("Center Cube:rotation_degrees:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 0, -1, 180, 1, -180, -180, -1, 180, 0, 0, -360, -1, 180, 1, -180 ),
+"times": PoolRealArray( 0, 1, 2 )
+}
+
+[sub_resource type="Animation" id=20]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/path = NodePath("Center Cube:rotation_degrees:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath("Center Cube:rotation_degrees:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( -180, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/2/type = "bezier"
+tracks/2/path = NodePath("Center Cube:rotation_degrees:z")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+
+[node name="Grav Projectile" type="Spatial"]
+script = ExtResource( 1 )
+travel_curve = SubResource( 28 )
+
+[node name="Center Cube" type="MeshInstance" parent="."]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0 )
+mesh = SubResource( 17 )
+material/0 = SubResource( 18 )
+
+[node name="Gravity Particles" type="Particles" parent="."]
+transform = Transform( 0.998012, 0, -0.0630285, 0, 1, 0, 0.0630285, 0, 0.998012, 0, 0, 0 )
+amount = 12
+lifetime = 1.5
+process_material = SubResource( 23 )
+draw_pass_1 = SubResource( 25 )
+
+[node name="Haze" type="MeshInstance" parent="."]
+cast_shadow = 0
+mesh = SubResource( 27 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "Gravity Ball"
+"anims/Gravity Ball" = SubResource( 19 )
+anims/RESET = SubResource( 20 )
