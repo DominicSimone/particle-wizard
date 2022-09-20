@@ -1,18 +1,50 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://textures/temp ground.png" type="Texture" id=1]
 [ext_resource path="res://scripts/PlayerController.gd" type="Script" id=2]
+[ext_resource path="res://scripts/Enemy.gd" type="Script" id=3]
 [ext_resource path="res://scripts/ParticleCollisions.gd" type="Script" id=4]
 [ext_resource path="res://beam.gdshader" type="Shader" id=5]
 [ext_resource path="res://scripts/ParticleEntity.gd" type="Script" id=6]
+[ext_resource path="res://MainUI.gd" type="Script" id=7]
 
 [sub_resource type="StyleBoxFlat" id=32]
 bg_color = Color( 0.513726, 0.0745098, 0.0392157, 1 )
 
 [sub_resource type="StyleBoxEmpty" id=31]
 
-[sub_resource type="StyleBoxFlat" id=30]
-bg_color = Color( 0.168627, 0.0627451, 0.415686, 1 )
+[sub_resource type="StyleBoxFlat" id=34]
+bg_color = Color( 0.0941176, 0.0823529, 0.431373, 1 )
+
+[sub_resource type="Animation" id=35]
+resource_name = "Low_Mana"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Mana:custom_styles/fg:bg_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 0.0941176, 0.0823529, 0.431373, 1 ), Color( 0.619608, 0.266667, 0.862745, 1 ), Color( 0.0941176, 0.0823529, 0.431373, 1 ), Color( 0.619608, 0.266667, 0.862745, 1 ), Color( 0.0941176, 0.0823529, 0.431373, 1 ) ]
+}
+
+[sub_resource type="Animation" id=36]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Mana:custom_styles/fg:bg_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 0.0941176, 0.0823529, 0.431373, 1 ) ]
+}
 
 [sub_resource type="BoxShape" id=29]
 extents = Vector3( 128.184, 127.235, 0.267175 )
@@ -94,6 +126,9 @@ flatness = 0.5
 gravity = Vector3( 0, 0, 0 )
 initial_velocity = 15.0
 
+[sub_resource type="SphereShape" id=33]
+radius = 1.38596
+
 [node name="Spatial" type="Spatial"]
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
@@ -105,6 +140,7 @@ shadow_enabled = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
+script = ExtResource( 7 )
 
 [node name="Health" type="ProgressBar" parent="Control"]
 anchor_right = 1.0
@@ -119,10 +155,16 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = -10.0
-custom_styles/fg = SubResource( 30 )
+rect_pivot_offset = Vector2( 299, 6 )
+custom_styles/fg = SubResource( 34 )
 custom_styles/bg = SubResource( 31 )
 value = 50.0
 percent_visible = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Control/Mana"]
+root_node = NodePath("../..")
+anims/Low_Mana = SubResource( 35 )
+anims/RESET = SubResource( 36 )
 
 [node name="ColorRect" type="ColorRect" parent="Control"]
 visible = false
@@ -191,8 +233,7 @@ far = 232.8
 [node name="Player" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.07806, 0 )
 script = ExtResource( 2 )
-health_bar_path = NodePath("../Control/Health")
-mana_bar_path = NodePath("../Control/Mana")
+ui_path = NodePath("../Control")
 
 [node name="Camera" type="Camera" parent="Player"]
 transform = Transform( 0.629225, -0.716646, 0.300823, 0, 0.387049, 0.922059, -0.777223, -0.580183, 0.243541, 5.12004, 15.967, 4.55016 )
@@ -244,4 +285,30 @@ local_coords = false
 process_material = SubResource( 12 )
 draw_pass_1 = SubResource( 14 )
 
+[node name="Enemy" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.3508, 2.04393, 0 )
+script = ExtResource( 3 )
+
+[node name="Outer Ring" type="CSGTorus" parent="Enemy"]
+transform = Transform( 0.866025, -0.5, 0, 0.5, 0.866025, 0, 0, 0, 1, 0, -4.76837e-07, 0 )
+inner_radius = 1.0
+outer_radius = 1.4
+
+[node name="Inner Ring" type="CSGTorus" parent="Enemy"]
+transform = Transform( -0.713075, 0.701028, 0.00910928, 0.699051, 0.711934, -0.0669095, -0.0533907, -0.0413437, -0.997717, 0, -4.76837e-07, 0 )
+inner_radius = 0.5
+outer_radius = 0.8
+
+[node name="Core" type="CSGSphere" parent="Enemy"]
+radius = 0.25
+radial_segments = 8
+rings = 4
+
+[node name="Area" type="Area" parent="Enemy"]
+input_ray_pickable = false
+
+[node name="CollisionShape" type="CollisionShape" parent="Enemy/Area"]
+shape = SubResource( 33 )
+
 [connection signal="input_event" from="Ground/StaticBody" to="Player" method="_on_StaticBody_input_event"]
+[connection signal="body_entered" from="Enemy/Area" to="Enemy" method="_on_Area_body_entered"]

@@ -4,12 +4,10 @@ extends Viewport
 
 # Concept behind particle collisions
 # When a shader detects that a particle is near a collider
-# -> set particle color to 1.0 / 255.0,..,.. (maybe low alpha?)
 # -> move particle position to below ground at origin to be captured by viewport camera
 # -> mark particle to be deleted next frame
 # Viewport will render every frame
-# Read texture every frame and check color of pixels
-# Check color for # of collisions with colliders
+# Read texture every frame and check for pixels
 # Can segment texture into sections to handle multiple (but limited) colliders
 
 func readViewport() -> int:

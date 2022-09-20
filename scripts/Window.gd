@@ -7,7 +7,6 @@ func _ready():
 
 func _input(event): 
 	if event.is_action_pressed("ui_cancel"):
-		print("ui cancel")
 		get_tree().quit()
 	if event.is_action_pressed("fullscreen_toggle"):
 		OS.window_fullscreen = !OS.window_fullscreen

@@ -1,19 +1,21 @@
 extends Spatial
 
 export var speed: float = 10
-export var health_bar_path: NodePath
-export var mana_bar_path: NodePath
-onready var health_bar: ProgressBar = get_node(health_bar_path)
-onready var mana_bar: ProgressBar = get_node(mana_bar_path)
+export var ui_path: NodePath
+onready var ui: Control = get_node(ui_path)
 
 onready var camera = get_node("Camera")
 onready var grav_scene := preload("res://Grav Projectile.tscn")
+onready var shot_scene := preload("res://PlayerShot.tscn")
 
 var grav_ball
 var grav_out: bool = false
+var grav_cost: float = 10
+var shot_cost: float = 20
 
 var health: float = 100
 var mana: float = 100
+var mana_recycle_ratio: float = 0.25
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -27,7 +29,7 @@ func _process(delta):
 
 func mana_cost(delta):
 	if grav_out:
-		mana -= delta * 10
+		mana -= delta * grav_cost
 	if mana < 0:
 		retrieve_ball()
 		mana = 0
@@ -38,32 +40,47 @@ func regen(delta):
 
 func particleCollisions(num: int):
 	health -= num
+	mana += num * mana_recycle_ratio
 
 func update_ui():
-	health_bar.value = health
-	mana_bar.value = mana
+	ui.set_health(health)
+	ui.set_mana(mana)
 
 func movement(delta):
 	var dir = Vector3()
 	var inputMoveVector = Vector2()
 
 	var aim = camera.transform.basis
-	if Input.is_action_pressed("move_forward"):
-		inputMoveVector.y += 1
-	if Input.is_action_pressed("move_backward"):
-		inputMoveVector.y -= 1
-	if Input.is_action_pressed("move_left"):
-		inputMoveVector.x -= 1
-	if Input.is_action_pressed("move_right"):
-		inputMoveVector.x += 1
-
+	
+	inputMoveVector.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
+	inputMoveVector.y = Input.get_action_strength("move_forward") - Input.get_action_strength("move_backward")
 	inputMoveVector = inputMoveVector.normalized()
+	
 	dir += -aim.z * inputMoveVector.y
 	dir += aim.x * inputMoveVector.x
 	dir.y = 0
 	dir = dir.normalized() * speed * delta
 	
 	transform = transform.translated(dir)
+
+func cast_grav(target):
+	if grav_ball == null:
+		grav_ball = grav_scene.instance()
+		get_tree().root.add_child(grav_ball)
+	if grav_out:
+		retrieve_ball()
+	else:
+		send_ball(target)
+
+func cast_shot(target):
+	if mana > shot_cost:
+		mana -= shot_cost
+		var new_shot = shot_scene.instance()
+		get_tree().root.add_child(new_shot)
+		new_shot.translation = translation
+		new_shot.set_target(target)
+	else:
+		ui.not_enough_mana()
 
 func send_ball(target):
 	grav_out = true
@@ -78,10 +95,7 @@ func retrieve_ball():
 func _on_StaticBody_input_event(camera: Node, event: InputEvent, position: Vector3, normal: Vector3, shape_idx: int) -> void:
 	if event is InputEventMouseButton:
 		if event.pressed:
-			if grav_ball == null:
-				grav_ball = grav_scene.instance()
-				get_tree().root.add_child(grav_ball)
-			if grav_out:
-				retrieve_ball()
-			else:
-				send_ball(position)
+			if event.button_index == BUTTON_RIGHT:
+				cast_grav(position)
+			if event.button_index == BUTTON_LEFT:
+				cast_shot(position)
