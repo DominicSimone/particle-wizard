@@ -11,7 +11,7 @@ onready var shot_scene := preload("res://PlayerShot.tscn")
 var grav_ball
 var grav_out: bool = false
 var grav_cost: float = 10
-var shot_cost: float = 20
+var shot_cost: float = 2
 
 var health: float = 100
 var mana: float = 100
