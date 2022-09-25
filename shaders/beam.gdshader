@@ -34,16 +34,24 @@ uniform vec4 color_value : hint_color;
 uniform int trail_divisor;
 uniform vec3 gravity;
 
-uniform vec4 player_collider;
+uniform vec4 particle_collider_0;
+uniform vec4 particle_collider_1;
+uniform vec4 particle_collider_2;
+uniform vec4 particle_collider_3;
 uniform vec4 gravity_point = vec4(0, 0, 0, 0);
 const float grav_damp_radius = 5.0;
 const float point_mass = 10.0;
 const float coord_step = 0.2;
-const int vp_size = 8;
+uniform int vp_size = 8;
+uniform vec2 sectors = vec2(2, 2);
 
-vec3 to_viewport(in uint number, in float rand_int) {
+// TODO include sector in calculations
+vec3 to_viewport(in uint number, in float rand, in int sector) {
+	int x_px_size = vp_size / int(sectors.x);
+	int y_px_size = vp_size / int(sectors.y);
 	int n = int(number);
-	int offset = int(rand_int * float(vp_size));
+	// random int between 0 and vp_size
+	int offset = int(rand * float(vp_size));
 	return vec3(float(n % vp_size - vp_size / 2) * coord_step, -1, float(offset - vp_size / 2) * coord_step);
 }
 
@@ -151,56 +159,20 @@ void vertex() {
 		// apply point gravity
 		float dist_to_grav = distance(TRANSFORM[3].xyz, gravity_point.xyz);
 		float grav_force = gravity_point.a * point_mass / pow(dist_to_grav, 2);
-//		tex_damping += step(dist_to_grav, grav_damp_radius) * grav_force;
 		force += grav_force * normalize(gravity_point.xyz - TRANSFORM[3].xyz);
 		
 		// apply attractor forces
 		VELOCITY += force * DELTA;
-		// orbit velocity
-//		if (damping + tex_damping > 0.0) {
-//			float v = length(VELOCITY);
-//			float damp = (damping + tex_damping) * mix(1.0, rand_from_seed(alt_seed), damping_random);
-//			v -= damp * DELTA;
-//			if (v < 0.0) {
-//				VELOCITY = vec3(0.0);
-//			} else {
-//				VELOCITY = normalize(VELOCITY) * v;
-//			}
-//		}
+
 		float base_angle = (initial_angle + tex_angle) * mix(1.0, angle_rand, initial_angle_random);
 		base_angle += CUSTOM.y * LIFETIME * (angular_velocity + tex_angular_velocity) * mix(1.0, rand_from_seed(alt_seed) * 2.0 - 1.0, angular_velocity_random);
 		CUSTOM.x = base_angle * degree_to_rad;
 		CUSTOM.z = (anim_offset + tex_anim_offset) * mix(1.0, anim_offset_rand, anim_offset_random) + tv * (anim_speed + tex_anim_speed) * mix(1.0, rand_from_seed(alt_seed), anim_speed_random);
 	}
-//	float tex_scale = 1.0;
-//	float tex_hue_variation = 0.0;
-//	float hue_rot_angle = (hue_variation + tex_hue_variation) * pi * 2.0 * mix(1.0, hue_rot_rand * 2.0 - 1.0, hue_variation_random);
-//	float hue_rot_c = cos(hue_rot_angle);
-//	float hue_rot_s = sin(hue_rot_angle);
-//	mat4 hue_rot_mat = mat4(vec4(0.299, 0.587, 0.114, 0.0),
-//			vec4(0.299, 0.587, 0.114, 0.0),
-//			vec4(0.299, 0.587, 0.114, 0.0),
-//			vec4(0.000, 0.000, 0.000, 1.0)) +
-//		mat4(vec4(0.701, -0.587, -0.114, 0.0),
-//			vec4(-0.299, 0.413, -0.114, 0.0),
-//			vec4(-0.300, -0.588, 0.886, 0.0),
-//			vec4(0.000, 0.000, 0.000, 0.0)) * hue_rot_c +
-//		mat4(vec4(0.168, 0.330, -0.497, 0.0),
-//			vec4(-0.328, 0.035,  0.292, 0.0),
-//			vec4(1.250, -1.050, -0.203, 0.0),
-//			vec4(0.000, 0.000, 0.000, 0.0)) * hue_rot_s;
-//	COLOR = hue_rot_mat * color_value;
 
 	TRANSFORM[0].xyz = normalize(TRANSFORM[0].xyz);
 	TRANSFORM[1].xyz = normalize(TRANSFORM[1].xyz);
 	TRANSFORM[2].xyz = normalize(TRANSFORM[2].xyz);
-//	float base_scale = tex_scale * mix(scale, 1.0, scale_random * scale_rand);
-//	if (base_scale < 0.000001) {
-//		base_scale = 0.000001;
-//	}
-//	TRANSFORM[0].xyz *= base_scale;
-//	TRANSFORM[1].xyz *= base_scale;
-//	TRANSFORM[2].xyz *= base_scale;
 	
 	// Bounce particles off the ground (reflect when y <= 0)
 	if (TRANSFORM[3].y <= coord_step) {
@@ -208,13 +180,16 @@ void vertex() {
 		VELOCITY.y = abs(VELOCITY.y) * 0.5;
 	}
 	
-	// Player collider logic
-	if (distance(TRANSFORM[3].xyz, player_collider.xyz) < player_collider.a) {
-		TRANSFORM[3].xyz = to_viewport(NUMBER, rand_from_seed(alt_seed));
-		ACTIVE = false
+	// Particle collider logic (convert to uniform array in 4.0 instead of distinct collider variables)
+	vec4 colliders[] = {particle_collider_0, particle_collider_1, particle_collider_2, particle_collider_3};
+	for (int i = 0; i < colliders.length(); i++) {
+		if (distance(TRANSFORM[3].xyz, colliders[i].xyz) < colliders[i].a) {
+			TRANSFORM[3].xyz = to_viewport(NUMBER, rand_from_seed(alt_seed), i);
+			ACTIVE = false;
+		}
 	}
 	
-	// Gravity point collider
+	// Gravity point collider (consume particles too close to the center of gravity)
 	if (distance(TRANSFORM[3].xyz, gravity_point.xyz) < coord_step * 2.0) {
 		ACTIVE = false;
 	}

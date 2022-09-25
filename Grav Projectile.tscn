@@ -98,6 +98,7 @@ tracks/2/keys = {
 
 [node name="Grav Projectile" type="Spatial"]
 script = ExtResource( 1 )
+strength = -10
 travel_curve = SubResource( 28 )
 
 [node name="Center Cube" type="MeshInstance" parent="."]

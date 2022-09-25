@@ -8,6 +8,16 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Spatial",
+"class": "ParticleCollider",
+"language": "GDScript",
+"path": "res://ParticleCollider.gd"
+} ]
+_global_script_class_icons={
+"ParticleCollider": ""
+}
+
 [application]
 
 config/name="Particle Wizard"

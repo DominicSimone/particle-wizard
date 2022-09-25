@@ -10,16 +10,12 @@ onready var shot_scene := preload("res://PlayerShot.tscn")
 
 var grav_ball
 var grav_out: bool = false
-var grav_cost: float = 10
+var grav_cost: float = 1
 var shot_cost: float = 2
 
 var health: float = 100
 var mana: float = 100
 var mana_recycle_ratio: float = 0.25
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	EntityManager.registerEntity(self)
 
 func _process(delta):
 	update_ui()
@@ -37,10 +33,6 @@ func mana_cost(delta):
 func regen(delta):
 	health = min(health + delta, 100)
 	mana = min(mana + delta, 100) 
-
-func particleCollisions(num: int):
-	health -= num
-	mana += num * mana_recycle_ratio
 
 func update_ui():
 	ui.set_health(health)
@@ -99,3 +91,7 @@ func _on_StaticBody_input_event(camera: Node, event: InputEvent, position: Vecto
 				cast_grav(position)
 			if event.button_index == BUTTON_LEFT:
 				cast_shot(position)
+
+func _on_ParticleCollider_hit(info) -> void:
+	health -= info
+	mana += info * mana_recycle_ratio
