@@ -37,10 +37,14 @@ func _ready() -> void:
 	# Size our array correctly
 	for sector_num in sectors.x * sectors.y:
 		data.append(0)
+	
+	print("Collision sectors: ", data)
 
 func getSector(x: int, y: int) -> int:
 	return (y / y_sector_size) * y_sectors + x / x_sector_size
 
+# TODO reading wrong sectors? some overlap between sectors? reading viewport not working as intended
+# it almost seems like the particles arent exactly fitting into a single pixel
 func readViewport() -> Array:
 	var image = get_texture().get_data()
 	var hits: int = 0
@@ -55,11 +59,9 @@ func readViewport() -> Array:
 			var pixel = image.get_pixel(x, y)
 			if pixel.a > 0:
 				hits += 1
-	# Need one last check because we won't get a sector outside the box to
-	# finalize the last data value
 	data[getSector(image.get_width() - 1, image.get_height() - 1)] = hits
 	image.unlock()
-	
+
 	return data
 
 func _process(delta) -> void:

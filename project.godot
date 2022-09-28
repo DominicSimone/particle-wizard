@@ -12,7 +12,7 @@ _global_script_classes=[ {
 "base": "Spatial",
 "class": "ParticleCollider",
 "language": "GDScript",
-"path": "res://ParticleCollider.gd"
+"path": "res://scripts/ParticleCollider.gd"
 } ]
 _global_script_class_icons={
 "ParticleCollider": ""

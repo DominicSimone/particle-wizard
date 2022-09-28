@@ -95,3 +95,4 @@ func _on_StaticBody_input_event(camera: Node, event: InputEvent, position: Vecto
 func _on_ParticleCollider_hit(info) -> void:
 	health -= info
 	mana += info * mana_recycle_ratio
+	update_ui()

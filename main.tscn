@@ -10,7 +10,7 @@
 [ext_resource path="res://scripts/Shield.gd" type="Script" id=8]
 [ext_resource path="res://shaders/force_field.gdshader" type="Shader" id=9]
 [ext_resource path="res://objects/gem.obj" type="ArrayMesh" id=10]
-[ext_resource path="res://ParticleCollider.gd" type="Script" id=11]
+[ext_resource path="res://scripts/ParticleCollider.gd" type="Script" id=11]
 
 [sub_resource type="StyleBoxFlat" id=32]
 bg_color = Color( 0.513726, 0.0745098, 0.0392157, 1 )
@@ -90,10 +90,10 @@ shader_param/color_value = Color( 1, 1, 1, 1 )
 shader_param/trail_divisor = 1
 shader_param/gravity = Vector3( 0, -1e-06, 0 )
 shader_param/particle_collider_0 = Plane( 0, 0, 0, 0 )
-shader_param/particle_collider_1 = Plane( 0, 0, 0, 0 )
-shader_param/particle_collider_2 = null
-shader_param/particle_collider_3 = null
-shader_param/gravity_point = Plane( 0, 0, 0, 0 )
+shader_param/particle_collider_1 = Plane( 0, 0, 0, 2 )
+shader_param/particle_collider_2 = Plane( 0, 0, 0, 0 )
+shader_param/particle_collider_3 = Plane( 0, 0, 0, 0 )
+shader_param/gravity_point = Plane( 0, -5, 0, 0 )
 shader_param/vp_size = 8
 shader_param/sectors = Vector2( 2, 2 )
 
@@ -288,9 +288,14 @@ margin_bottom = 0.199997
 stretch = true
 
 [node name="Viewport" type="Viewport" parent="Control/ViewportContainer"]
-size = Vector2( 65, 65 )
+size = Vector2( 8, 8 )
+transparent_bg = true
 handle_input_locally = false
+hdr = false
 render_target_update_mode = 3
+__meta__ = {
+"_editor_description_": ""
+}
 
 [node name="Camera" type="Camera" parent="Control/ViewportContainer/Viewport"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -0.634983, 2.7756e-08 )
@@ -343,7 +348,7 @@ transform = Transform( 0.629225, -0.716646, 0.300823, 0, 0.387049, 0.922059, -0.
 fov = 50.0
 
 [node name="MeshInstance" type="MeshInstance" parent="Player"]
-transform = Transform( 0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, -0.0567212, 0 )
+transform = Transform( 0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, -0.057, 0 )
 layers = 3
 mesh = SubResource( 1 )
 
@@ -373,7 +378,7 @@ process_material = SubResource( 6 )
 draw_pass_1 = SubResource( 5 )
 
 [node name="BeamProcessMaterial" type="Particles" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.33123, 1.02217, 6.08643 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -26.0677, 1.02217, 6.08643 )
 visible = false
 cast_shadow = 0
 amount = 200

@@ -45,14 +45,18 @@ const float coord_step = 0.2;
 uniform int vp_size = 8;
 uniform vec2 sectors = vec2(2, 2);
 
-// TODO include sector in calculations
+// Pick a square in the viewport that lies in the sector provided
+// TODO doesn't seem to work when collider radius > 1; all particles go to same sector regardless
+// of collider detected
 vec3 to_viewport(in uint number, in float rand, in int sector) {
-	int x_px_size = vp_size / int(sectors.x);
-	int y_px_size = vp_size / int(sectors.y);
-	int n = int(number);
-	// random int between 0 and vp_size
-	int offset = int(rand * float(vp_size));
-	return vec3(float(n % vp_size - vp_size / 2) * coord_step, -1, float(offset - vp_size / 2) * coord_step);
+	int x_sector_px_size = vp_size / int(sectors.x);
+	int y_sector_px_size = vp_size / int(sectors.y);
+	int x_offset = sector % int(sectors.y) * x_sector_px_size;
+	int y_offset = sector / int(sectors.x) * y_sector_px_size;
+	int x = (int(number) % x_sector_px_size) + x_offset;
+	int y = int(rand * float(y_sector_px_size)) + y_offset;
+	
+	return vec3(float(x - vp_size / 2) * coord_step, -1, float(y - vp_size / 2) * coord_step);
 }
 
 float rand_from_seed(inout uint seed) {
@@ -186,6 +190,7 @@ void vertex() {
 		if (distance(TRANSFORM[3].xyz, colliders[i].xyz) < colliders[i].a) {
 			TRANSFORM[3].xyz = to_viewport(NUMBER, rand_from_seed(alt_seed), i);
 			ACTIVE = false;
+			break;
 		}
 	}
 	

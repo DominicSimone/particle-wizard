@@ -27,25 +27,27 @@ func updateParticleUniforms():
 			particleSpawner.process_material.set_shader_param(uniform_name, data)
 			i += 1
 		
-		i = 0
+		# TODO convert to array format like particle colliders, add second entry in shader
 		if _gravityPoints.size() > 0:
 			var grav_pos = _gravityPoints[0].translation
 			var uniform = Rect2(grav_pos.x, grav_pos.y, grav_pos.z, _gravityPoints[0].strength)
 			particleSpawner.process_material.set_shader_param("gravity_point", uniform)
 
-# Registers an entity to the entity list
 func registerParticleCollider(object: Node) -> int:
+	print("Registered particle collider: ", object)
 	_particleColliders[colliderCount] = object
 	colliderCount += 1
 	return colliderCount - 1
 
 func registerParticleSpawner(object: Particles) -> int:
+	print("Registered particle spawner: ", object)
 	_particleSpawner[particleCount] = object
 	particleCount += 1
 	updateViewportShaderParams(_vp_size, _sectors)
 	return particleCount - 1
 
 func registerGravityPoint(object: Object) -> int:
+	print("Registered gravity point: ", object)	
 	_gravityPoints[gravCount] = object
 	gravCount += 1
 	return gravCount - 1
@@ -53,13 +55,10 @@ func registerGravityPoint(object: Object) -> int:
 func particleCollisions(collision_data: Array):
 	var i = 0
 	for collider in _particleColliders.values():
-		collider._collide(collision_data[i])
+		var collision = collision_data[i]
+		if collision > 0:
+			collider._collide(collision)
 		i += 1
-
-
-# Called from viewports to report pixels representing collision detections
-func forwardParticleCollisions(index: int, todo_other_info: Object):
-	pass
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
