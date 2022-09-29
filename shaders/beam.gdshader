@@ -46,8 +46,6 @@ uniform int vp_size = 8;
 uniform vec2 sectors = vec2(2, 2);
 
 // Pick a square in the viewport that lies in the sector provided
-// TODO doesn't seem to work when collider radius > 1; all particles go to same sector regardless
-// of collider detected
 vec3 to_viewport(in uint number, in float rand, in int sector) {
 	int x_sector_px_size = vp_size / int(sectors.x);
 	int y_sector_px_size = vp_size / int(sectors.y);
@@ -56,7 +54,7 @@ vec3 to_viewport(in uint number, in float rand, in int sector) {
 	int x = (int(number) % x_sector_px_size) + x_offset;
 	int y = int(rand * float(y_sector_px_size)) + y_offset;
 	
-	return vec3(float(x - vp_size / 2) * coord_step, -1, float(y - vp_size / 2) * coord_step);
+	return vec3(float(x - vp_size / 2) * coord_step, -10, float(y - vp_size / 2) * coord_step);
 }
 
 float rand_from_seed(inout uint seed) {
@@ -195,7 +193,7 @@ void vertex() {
 	}
 	
 	// Gravity point collider (consume particles too close to the center of gravity)
-	if (distance(TRANSFORM[3].xyz, gravity_point.xyz) < coord_step * 2.0) {
+	if (distance(TRANSFORM[3].xyz, gravity_point.xyz) < coord_step * 2.0 && gravity_point.a > 0.0) {
 		ACTIVE = false;
 	}
 	

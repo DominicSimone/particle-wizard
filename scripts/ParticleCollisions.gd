@@ -43,24 +43,27 @@ func _ready() -> void:
 func getSector(x: int, y: int) -> int:
 	return (y / y_sector_size) * y_sectors + x / x_sector_size
 
-# TODO reading wrong sectors? some overlap between sectors? reading viewport not working as intended
-# it almost seems like the particles arent exactly fitting into a single pixel
+func clear_data():
+	for i in data.size():
+		data[i] = 0
+
 func readViewport() -> Array:
 	var image = get_texture().get_data()
 	var hits: int = 0
 	var cur_sector: int = 0
+	clear_data()
 	image.lock()
 	for x in image.get_width():
 		for y in image.get_height():
-			if getSector(x, y) != cur_sector:
-				data[cur_sector] = hits
-				cur_sector = getSector(x, y)
+			if getSector(x, VP_SIZE - y - 1) != cur_sector:
+				data[cur_sector] += hits
+				cur_sector = getSector(x, VP_SIZE - y - 1)
 				hits = 0
 			var pixel = image.get_pixel(x, y)
 			if pixel.a > 0:
 				hits += 1
-	data[getSector(image.get_width() - 1, image.get_height() - 1)] = hits
 	image.unlock()
+	data[getSector(image.get_width() - 1, image.get_height() - 1)] = hits
 
 	return data
 

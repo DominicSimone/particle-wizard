@@ -47,7 +47,7 @@ func registerParticleSpawner(object: Particles) -> int:
 	return particleCount - 1
 
 func registerGravityPoint(object: Object) -> int:
-	print("Registered gravity point: ", object)	
+	print("Registered gravity point: ", object)
 	_gravityPoints[gravCount] = object
 	gravCount += 1
 	return gravCount - 1

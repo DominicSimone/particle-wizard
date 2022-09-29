@@ -4,7 +4,6 @@ signal hit(info)
 export var size: float = 1
 
 func _collide(info):
-	print(info)
 	emit_signal("hit", info)
 
 func to_uniform() -> Rect2:

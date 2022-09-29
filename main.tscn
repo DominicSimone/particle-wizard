@@ -90,7 +90,7 @@ shader_param/color_value = Color( 1, 1, 1, 1 )
 shader_param/trail_divisor = 1
 shader_param/gravity = Vector3( 0, -1e-06, 0 )
 shader_param/particle_collider_0 = Plane( 0, 0, 0, 0 )
-shader_param/particle_collider_1 = Plane( 0, 0, 0, 2 )
+shader_param/particle_collider_1 = Plane( 0, 0, 0, 0 )
 shader_param/particle_collider_2 = Plane( 0, 0, 0, 0 )
 shader_param/particle_collider_3 = Plane( 0, 0, 0, 0 )
 shader_param/gravity_point = Plane( 0, -5, 0, 0 )
@@ -288,7 +288,7 @@ margin_bottom = 0.199997
 stretch = true
 
 [node name="Viewport" type="Viewport" parent="Control/ViewportContainer"]
-size = Vector2( 8, 8 )
+size = Vector2( 65, 65 )
 transparent_bg = true
 handle_input_locally = false
 hdr = false
