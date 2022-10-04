@@ -13,7 +13,7 @@ func _ready() -> void:
 			}
 		],
 		"shimmy": [
-			[Shimmy.new()],
+			[Shimmy.new(3, 0.5)],
 			{
 				"stop_and_shoot": [Timed.new(10), RandomChance.new(0.1)]
 			}
@@ -21,20 +21,24 @@ func _ready() -> void:
 		"stop_and_shoot": [
 			[Cast.new(preload("res://PlayerShot.tscn"), 0, 1)],
 			{
-				"shimmy": [Timed.new(2)]
+				"shimmy": [Timed.new(1.5)]
 			}
 		]
 	})
 	state.on_entry(self)
 
-func _process(delta: float) -> void:
-	state.act(delta)
-	var next_state = state.evaluate(EEvent.Types.TIME_DELTA, delta)
+func change_state(type: int, payload):
+	var next_state = state.evaluate(type, payload)
 	if next_state:
 		state.on_exit()
 		state = next_state
 		state.on_entry(self)
 
+func _process(delta: float) -> void:
+	state.act(delta)
+	change_state(EEvent.Types.TIME_DELTA, delta)
+
 func _on_Enemy_body_entered(body: Node) -> void:
 	health -= 1
+	change_state(EEvent.Types.ON_HIT, 1)
 	body.queue_free()

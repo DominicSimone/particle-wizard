@@ -8,6 +8,6 @@ func set_spatial(obj: Spatial):
 func reset():
 	pass
 
-# TODO
+# TODO pass in EntityKnowledge
 func act(delta: float):
 	pass

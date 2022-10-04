@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Condition",
+"class": "AllOf",
+"language": "GDScript",
+"path": "res://scripts/state machine/conditions/AllOf.gd"
+}, {
 "base": "Reference",
 "class": "Behavior",
 "language": "GDScript",
@@ -29,10 +34,25 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/state machine/EEvent.gd"
 }, {
+"base": "Reference",
+"class": "EntityKnowledge",
+"language": "GDScript",
+"path": "res://scripts/EntityKnowledge.gd"
+}, {
 "base": "Behavior",
 "class": "Idle",
 "language": "GDScript",
 "path": "res://scripts/state machine/behaviors/Idle.gd"
+}, {
+"base": "Condition",
+"class": "NOf",
+"language": "GDScript",
+"path": "res://scripts/state machine/conditions/NOf.gd"
+}, {
+"base": "Condition",
+"class": "NoneOf",
+"language": "GDScript",
+"path": "res://scripts/state machine/conditions/NoneOf.gd"
 }, {
 "base": "Spatial",
 "class": "ParticleCollider",
@@ -80,11 +100,15 @@ _global_script_classes=[ {
 "path": "res://scripts/Util.gd"
 } ]
 _global_script_class_icons={
+"AllOf": "",
 "Behavior": "",
 "Cast": "",
 "Condition": "",
 "EEvent": "",
+"EntityKnowledge": "",
 "Idle": "",
+"NOf": "",
+"NoneOf": "",
 "ParticleCollider": "",
 "RandomChance": "",
 "SMBuilder": "",
