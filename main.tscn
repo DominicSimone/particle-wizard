@@ -324,9 +324,12 @@ local_coords = false
 process_material = SubResource( 12 )
 draw_pass_1 = SubResource( 14 )
 
-[node name="Enemy" type="Spatial" parent="."]
+[node name="Enemy" type="Area" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.3508, 1.1649, 0 )
+collision_layer = 2
+input_ray_pickable = false
 script = ExtResource( 3 )
+max_health = 10.0
 
 [node name="Shield" parent="Enemy" instance=ExtResource( 8 )]
 
@@ -336,12 +339,7 @@ mesh = ExtResource( 10 )
 skeleton = NodePath("../..")
 material/0 = SubResource( 45 )
 
-[node name="Area" type="Area" parent="Enemy"]
-collision_layer = 2
-input_ray_pickable = false
-monitorable = false
-
-[node name="CollisionShape" type="CollisionShape" parent="Enemy/Area"]
+[node name="CollisionShape" type="CollisionShape" parent="Enemy"]
 shape = SubResource( 33 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Enemy"]
@@ -351,4 +349,4 @@ anims/Spin = SubResource( 39 )
 
 [connection signal="input_event" from="Ground/StaticBody" to="Player" method="_on_StaticBody_input_event"]
 [connection signal="hit" from="Player/ParticleCollider" to="Player" method="_on_ParticleCollider_hit"]
-[connection signal="body_entered" from="Enemy/Area" to="Enemy" method="_on_Area_body_entered"]
+[connection signal="body_entered" from="Enemy" to="Enemy" method="_on_Enemy_body_entered"]

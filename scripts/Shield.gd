@@ -35,7 +35,5 @@ func enable():
 func disable():
 	visible = false
 	particle_collider.enabled = false
-	old_layer_mask = collision_layer
-	old_collision_mask = collision_mask
 	collision_layer = 0
 	collision_mask = 0

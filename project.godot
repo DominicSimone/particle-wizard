@@ -9,13 +9,79 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Reference",
+"class": "Behavior",
+"language": "GDScript",
+"path": "res://scripts/state machine/Behavior.gd"
+}, {
+"base": "Reference",
+"class": "Condition",
+"language": "GDScript",
+"path": "res://scripts/state machine/Condition.gd"
+}, {
+"base": "Reference",
+"class": "EEvent",
+"language": "GDScript",
+"path": "res://scripts/state machine/EEvent.gd"
+}, {
+"base": "Behavior",
+"class": "Idle",
+"language": "GDScript",
+"path": "res://scripts/state machine/behaviors/Idle.gd"
+}, {
 "base": "Spatial",
 "class": "ParticleCollider",
 "language": "GDScript",
 "path": "res://scripts/ParticleCollider.gd"
+}, {
+"base": "Condition",
+"class": "RandomChance",
+"language": "GDScript",
+"path": "res://scripts/state machine/conditions/RandomChance.gd"
+}, {
+"base": "Reference",
+"class": "SMBuilder",
+"language": "GDScript",
+"path": "res://scripts/state machine/StateMachineBuilder.gd"
+}, {
+"base": "Reference",
+"class": "State",
+"language": "GDScript",
+"path": "res://scripts/state machine/State.gd"
+}, {
+"base": "Behavior",
+"class": "Talk",
+"language": "GDScript",
+"path": "res://scripts/state machine/behaviors/Talk.gd"
+}, {
+"base": "Condition",
+"class": "Timed",
+"language": "GDScript",
+"path": "res://scripts/state machine/conditions/Timed.gd"
+}, {
+"base": "Reference",
+"class": "Transition",
+"language": "GDScript",
+"path": "res://scripts/state machine/Transition.gd"
+}, {
+"base": "Reference",
+"class": "Util",
+"language": "GDScript",
+"path": "res://scripts/Util.gd"
 } ]
 _global_script_class_icons={
-"ParticleCollider": ""
+"Behavior": "",
+"Condition": "",
+"EEvent": "",
+"Idle": "",
+"ParticleCollider": "",
+"RandomChance": "",
+"SMBuilder": "",
+"State": "",
+"Talk": "",
+"Timed": "",
+"Transition": "",
+"Util": ""
 }
 
 [application]
