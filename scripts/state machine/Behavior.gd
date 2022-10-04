@@ -8,5 +8,6 @@ func set_spatial(obj: Spatial):
 func reset():
 	pass
 
+# TODO
 func act(delta: float):
 	pass

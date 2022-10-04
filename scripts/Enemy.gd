@@ -13,15 +13,15 @@ func _ready() -> void:
 			}
 		],
 		"shimmy": [
-			[Talk.new(["Shimmying"])],
+			[Shimmy.new()],
 			{
 				"stop_and_shoot": [Timed.new(10), RandomChance.new(0.1)]
 			}
 		],
 		"stop_and_shoot": [
-			[Idle.new()],
+			[Cast.new(preload("res://PlayerShot.tscn"), 0, 1)],
 			{
-				"shimmy": [Timed.new(1)]
+				"shimmy": [Timed.new(2)]
 			}
 		]
 	})
