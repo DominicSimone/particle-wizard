@@ -1,6 +1,6 @@
 class_name State
 
-var name:= "Unnamed"
+var name := "Unnamed"
 var behaviors: Array = []
 var transitions: Array = []
 var dirty := false
@@ -12,7 +12,7 @@ func _init(b: Array, t: Array):
 func evaluate(e_event, payload):
 	for transition in transitions:
 		if transition.evaluate(e_event, payload):
-			print("Transitioning to ", transition.to_state.name)
+#			print("Transitioning to ", transition.to_state.name)
 			return transition.to_state
 	return null
 
@@ -33,7 +33,6 @@ func reset():
 	for transition in transitions:
 		transition.reset()
 
-# TODO Should also include a 'EntityKnowledge' data payload as well 
-func act(delta: float):
+func act(delta: float, entityKnowledge: EntityKnowledge):
 	for behavior in behaviors:
-		behavior.act(delta)
+		behavior.act(delta, entityKnowledge)

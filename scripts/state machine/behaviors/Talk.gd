@@ -6,7 +6,7 @@ var texts := ["Hello"]
 func _init(t: Array) -> void:
 	texts = t
 	
-func act(delta: float): 
+func act(delta: float, entityKnowledge: EntityKnowledge): 
 	if not talked:
 		print(Util.rand_array(texts))
 		talked = true

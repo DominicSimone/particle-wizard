@@ -13,16 +13,16 @@ func _init(scene: PackedScene, del = 0, init_delay = 0) -> void:
 	initial_delay = init_delay
 	delay = del
 
-func act(delta):
+func act(delta: float, entityKnowledge: EntityKnowledge):
 	internal_timer += delta
 	if can_cast and internal_timer > initial_delay:
-		# TODO Get targeting information
+		# TODO Use targeting information
 		var spell = spell_scene.instance()
-		spatial.get_tree().root.add_child(spell)
+		spatial.get_parent().add_child(spell)
 		spell.translation = spatial.translation
 		spell.set_target(Vector3(0, 0, 0))
 		
-		print("Blam! Take this! I cast ", spell_scene)
+#		print("Blam! Take this! I cast ", spell_scene)
 		can_cast = false
 	if delay > 0 and internal_timer > delay:
 		can_cast = true

@@ -12,7 +12,7 @@ func _init(spd: float, dir_time: float):
 	speed = spd
 	change_dir_time = dir_time
 
-func act(delta: float):
+func act(delta: float, entityKnowledge: EntityKnowledge):
 	internal_timer += delta 
 	if internal_timer > change_dir_time:
 		internal_timer = 0

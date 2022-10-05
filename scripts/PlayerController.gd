@@ -17,7 +17,15 @@ var health: float = 100
 var mana: float = 100
 var mana_recycle_ratio: float = 0.25
 
+var alive := true
+
 func _process(delta):
+	if health < 0:
+		if alive:
+			ui.game_over()
+			pass
+		alive = false
+		return
 	update_ui()
 	movement(delta)
 	mana_cost(delta)
@@ -58,7 +66,7 @@ func movement(delta):
 func cast_grav(target):
 	if grav_ball == null:
 		grav_ball = grav_scene.instance()
-		get_tree().root.add_child(grav_ball)
+		get_parent().add_child(grav_ball)
 	if grav_out:
 		retrieve_ball()
 	else:
@@ -68,7 +76,7 @@ func cast_shot(target):
 	if mana > shot_cost:
 		mana -= shot_cost
 		var new_shot = shot_scene.instance()
-		get_tree().root.add_child(new_shot)
+		get_parent().add_child(new_shot)
 		new_shot.translation = translation
 		new_shot.set_target(target)
 	else:
@@ -85,7 +93,7 @@ func retrieve_ball():
 	grav_ball.visible = false
 
 func _on_StaticBody_input_event(camera: Node, event: InputEvent, position: Vector3, normal: Vector3, shape_idx: int) -> void:
-	if event is InputEventMouseButton:
+	if alive and event is InputEventMouseButton:
 		if event.pressed:
 			if event.button_index == BUTTON_RIGHT:
 				cast_grav(position)

@@ -51,3 +51,30 @@ static func build(def: Dictionary) -> State:
 		return state_map["start"]
 	else:
 		return state_map.values()[0]
+
+
+static func get_state_machine(identifier: String):
+	match identifier:
+		"debug_machine": return debug_machine()
+
+static func debug_machine():
+	return build({
+		"start": [
+			[Talk.new(["Greetings, cowards."])],
+			{
+				"shimmy": [Timed.new(1)]
+			}
+		],
+		"shimmy": [
+			[Shimmy.new(3, 0.5)],
+			{
+				"stop_and_shoot": [Timed.new(10), RandomChance.new(0.1)]
+			}
+		],
+		"stop_and_shoot": [
+			[Cast.new(preload("res://PlayerShot.tscn"), 0, 1)],
+			{
+				"shimmy": [Timed.new(1.5)]
+			}
+		]
+	})

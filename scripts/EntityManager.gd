@@ -11,6 +11,8 @@ var gravCount := 0
 var _vp_size: int
 var _sectors: Vector2
 
+
+
 func updateViewportShaderParams(vp_size: int, sectors: Vector2):
 	_vp_size = vp_size
 	_sectors = sectors
@@ -63,3 +65,20 @@ func particleCollisions(collision_data: Array):
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	updateParticleUniforms()
+
+func reset():
+	print("Resetting entity manager...")
+	# Need to reset shader params or they will carry over between restarts
+	for particleSpawner in _particleSpawner.values():
+		particleSpawner.process_material.set_shader_param("gravity_point", Rect2(0, 0, 0, 0))
+		for i in 4:
+			particleSpawner.process_material.set_shader_param("particle_collider_" + String(i), Rect2(0, 0, 0, 0))
+	
+	# Now can clear all entity information so we don't have dangling references, they will all be
+	# re-registered in respective _ready functions
+	_particleColliders = {}
+	_particleSpawner = {}
+	_gravityPoints = {}
+	colliderCount = 0
+	particleCount = 0
+	gravCount = 0
