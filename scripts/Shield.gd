@@ -11,12 +11,11 @@ var old_layer_mask = collision_layer
 var old_collision_mask = collision_mask
 
 signal shield_toggle(status)
+signal shield_hit
 
 func _ready() -> void:
-	if get_parent().has_method("_on_shield_toggle"):
-		connect("shield_toggle", get_parent(), "_on_shield_toggle")
-	else:
-		print("Parent does not have a shield handler")
+	Util.parent_hook(self, "shield_toggle")
+	Util.parent_hook(self, "shield_hit")
 
 func _process(delta: float) -> void:
 	regen_timer += delta
@@ -27,6 +26,7 @@ func _process(delta: float) -> void:
 
 func _on_ParticleCollider_hit(info) -> void:
 	if health > 0:
+		emit_signal("shield_hit")
 		anim.stop()
 		anim.play("Hit")
 		health -= 1

@@ -68,14 +68,22 @@ static func green_gem():
 			}
 		],
 		"activation": [
-			[CallFunc.new("add_shield")],
+			[CallFunc.new("add_shield"), CallFunc.new("set_active")],
 			{
-				"activated": []
+				"activated": [Timed.new(0)]
 			}
 		],
 		"activated": [
-			[],
-			{}
+			[Shimmy.new(3, 0.5)],
+			{
+				"stop_and_shoot": [Timed.new(10), RandomChance.new(0.1)]
+			}
+		],
+		"stop_and_shoot": [
+			[Cast.new(preload("res://PlayerShot.tscn"), 0, 1)],
+			{
+				"activated": [Timed.new(1.5)]
+			}
 		]
 	})
 

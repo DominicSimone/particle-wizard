@@ -16,7 +16,10 @@ func _init(method: String, del = 0, init_delay = 0) -> void:
 func act(delta: float, entityKnowledge: EntityKnowledge):
 	internal_timer += delta
 	if can_cast and internal_timer > initial_delay:
-		spatial.call(method_name)
+		if spatial.has_method(method_name):
+			spatial.call(method_name)
+		else:
+			printerr("Entity does not have method ", method_name)
 		can_cast = false
 	if delay > 0 and internal_timer > delay:
 		can_cast = true

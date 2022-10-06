@@ -41,6 +41,10 @@ func registerParticleCollider(object: Node) -> int:
 	colliderCount += 1
 	return colliderCount - 1
 
+func deregisterParticleCollider(handle: int):
+	_particleColliders.erase(handle)
+	colliderCount -= 1
+
 func registerParticleSpawner(object: Particles) -> int:
 	print("Registered particle spawner: ", object)
 	_particleSpawner[particleCount] = object

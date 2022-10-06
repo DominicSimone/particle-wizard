@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://textures/temp ground.png" type="Texture" id=1]
 [ext_resource path="res://scripts/PlayerController.gd" type="Script" id=2]
@@ -7,7 +7,6 @@
 [ext_resource path="res://shaders/particle.gdshader" type="Shader" id=5]
 [ext_resource path="res://scripts/ParticleEntity.gd" type="Script" id=6]
 [ext_resource path="res://scripts/MainUI.gd" type="Script" id=7]
-[ext_resource path="res://Shield.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Detector.tscn" type="PackedScene" id=9]
 [ext_resource path="res://objects/gem.obj" type="ArrayMesh" id=10]
 [ext_resource path="res://scripts/ParticleCollider.gd" type="Script" id=11]
@@ -234,6 +233,7 @@ anims/Low_Mana = SubResource( 35 )
 anims/RESET = SubResource( 36 )
 
 [node name="ColorRect" type="ColorRect" parent="Control"]
+visible = false
 anchor_right = 0.108
 anchor_bottom = 0.162
 margin_right = 0.199997
@@ -244,6 +244,7 @@ __meta__ = {
 }
 
 [node name="ViewportContainer" type="ViewportContainer" parent="Control"]
+visible = false
 anchor_right = 0.108
 anchor_bottom = 0.162
 margin_right = 0.199997
@@ -255,7 +256,7 @@ size = Vector2( 65, 65 )
 transparent_bg = true
 handle_input_locally = false
 hdr = false
-render_target_update_mode = 3
+render_target_update_mode = 0
 __meta__ = {
 "_editor_description_": ""
 }
@@ -373,6 +374,7 @@ script = ExtResource( 6 )
 
 [node name="BallShader" type="Particles" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.37387, 1.36184, 10.1825 )
+visible = false
 layers = 3
 amount = 103
 lifetime = 5.0
@@ -384,13 +386,11 @@ draw_pass_1 = SubResource( 5 )
 script = ExtResource( 6 )
 
 [node name="Enemy" type="Area" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.3508, 1.1649, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.65013, 1.1649, -7.57665 )
 collision_layer = 2
 input_ray_pickable = false
 script = ExtResource( 3 )
 max_health = 10.0
-
-[node name="Shield" parent="Enemy" instance=ExtResource( 8 )]
 
 [node name="Detector" parent="Enemy" instance=ExtResource( 9 )]
 
