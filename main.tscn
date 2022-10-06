@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=30 format=2]
 
 [ext_resource path="res://textures/temp ground.png" type="Texture" id=1]
 [ext_resource path="res://scripts/PlayerController.gd" type="Script" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://scripts/ParticleEntity.gd" type="Script" id=6]
 [ext_resource path="res://scripts/MainUI.gd" type="Script" id=7]
 [ext_resource path="res://Shield.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Detector.tscn" type="PackedScene" id=9]
 [ext_resource path="res://objects/gem.obj" type="ArrayMesh" id=10]
 [ext_resource path="res://scripts/ParticleCollider.gd" type="Script" id=11]
 
@@ -53,6 +54,9 @@ tracks/0/keys = {
 extents = Vector3( 128.184, 127.235, 0.267175 )
 
 [sub_resource type="CubeMesh" id=1]
+
+[sub_resource type="BoxShape" id=47]
+extents = Vector3( 0.476559, 0.928984, 0.479322 )
 
 [sub_resource type="ShaderMaterial" id=16]
 resource_local_to_scene = true
@@ -333,8 +337,11 @@ size = 1.75
 near = 0.02
 far = 232.8
 
-[node name="Player" type="Spatial" parent="."]
+[node name="Player" type="KinematicBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.07806, 0 )
+collision_layer = 8
+collision_mask = 0
+input_ray_pickable = false
 script = ExtResource( 2 )
 ui_path = NodePath("../Control")
 
@@ -349,6 +356,9 @@ mesh = SubResource( 1 )
 
 [node name="ParticleCollider" type="Spatial" parent="Player"]
 script = ExtResource( 11 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Player"]
+shape = SubResource( 47 )
 
 [node name="BeamShader" type="Particles" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.46678, 1.02217, 12.9406 )
@@ -381,6 +391,8 @@ script = ExtResource( 3 )
 max_health = 10.0
 
 [node name="Shield" parent="Enemy" instance=ExtResource( 8 )]
+
+[node name="Detector" parent="Enemy" instance=ExtResource( 9 )]
 
 [node name="gem" type="MeshInstance" parent="Enemy"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.199103, 0 )

@@ -1,4 +1,4 @@
-extends StaticBody
+class_name Shield extends StaticBody
 
 export var max_health: float 
 export var regen_cd: float 
@@ -9,6 +9,14 @@ onready var health: float = max_health
 var regen_timer: float = 0
 var old_layer_mask = collision_layer
 var old_collision_mask = collision_mask
+
+signal shield_toggle(status)
+
+func _ready() -> void:
+	if get_parent().has_method("_on_shield_toggle"):
+		connect("shield_toggle", get_parent(), "_on_shield_toggle")
+	else:
+		print("Parent does not have a shield handler")
 
 func _process(delta: float) -> void:
 	regen_timer += delta
@@ -27,12 +35,14 @@ func _on_ParticleCollider_hit(info) -> void:
 			disable()
 
 func enable():
+	emit_signal("shield_toggle", true)
 	visible = true
 	particle_collider.enabled = true
 	collision_layer = old_layer_mask
 	collision_mask = old_collision_mask
 
 func disable():
+	emit_signal("shield_toggle", false)
 	visible = false
 	particle_collider.enabled = false
 	collision_layer = 0

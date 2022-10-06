@@ -43,19 +43,41 @@ static func build(def: Dictionary) -> State:
 			transitions.append(Transition.new(state_map[dest_state_name], transitions_dict[dest_state_name]))
 		state_map[state_name].transitions = transitions
 	
+	var initial_state = "start" if state_map.has("start") else state_map.keys()[0]
+	
 	for state_name in state_refcount.keys():
-		if state_refcount[state_name] == 0 and state_name != "start":
+		if state_refcount[state_name] == 0 and state_name != initial_state:
 			printerr("'", state_name, "' has no inbound transitions")
 	
-	if state_map.has("start"):
-		return state_map["start"]
-	else:
-		return state_map.values()[0]
+	return state_map[initial_state]
 
 
 static func get_state_machine(identifier: String):
 	match identifier:
 		"debug_machine": return debug_machine()
+		"green_gem": return green_gem()
+	printerr("'", identifier, "' state machine not found.")
+
+# TODO
+static func green_gem():
+	return build({
+		"inactive": [
+			[],
+			{
+				"activation": [MatchEvent.new(EEvent.Types.PLAYER_DETECTION)]
+			}
+		],
+		"activation": [
+			[CallFunc.new("add_shield")],
+			{
+				"activated": []
+			}
+		],
+		"activated": [
+			[],
+			{}
+		]
+	})
 
 static func debug_machine():
 	return build({

@@ -20,6 +20,11 @@ _global_script_classes=[ {
 "path": "res://scripts/state machine/Behavior.gd"
 }, {
 "base": "Behavior",
+"class": "CallFunc",
+"language": "GDScript",
+"path": "res://scripts/state machine/behaviors/CallFunc.gd"
+}, {
+"base": "Behavior",
 "class": "Cast",
 "language": "GDScript",
 "path": "res://scripts/state machine/behaviors/Cast.gd"
@@ -45,6 +50,11 @@ _global_script_classes=[ {
 "path": "res://scripts/state machine/behaviors/Idle.gd"
 }, {
 "base": "Condition",
+"class": "MatchEvent",
+"language": "GDScript",
+"path": "res://scripts/state machine/conditions/MatchEvent.gd"
+}, {
+"base": "Condition",
 "class": "NOf",
 "language": "GDScript",
 "path": "res://scripts/state machine/conditions/NOf.gd"
@@ -68,6 +78,11 @@ _global_script_classes=[ {
 "class": "SMBuilder",
 "language": "GDScript",
 "path": "res://scripts/state machine/StateMachineBuilder.gd"
+}, {
+"base": "StaticBody",
+"class": "Shield",
+"language": "GDScript",
+"path": "res://scripts/Shield.gd"
 }, {
 "base": "Behavior",
 "class": "Shimmy",
@@ -102,16 +117,19 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "AllOf": "",
 "Behavior": "",
+"CallFunc": "",
 "Cast": "",
 "Condition": "",
 "EEvent": "",
 "EntityKnowledge": "",
 "Idle": "",
+"MatchEvent": "",
 "NOf": "",
 "NoneOf": "",
 "ParticleCollider": "",
 "RandomChance": "",
 "SMBuilder": "",
+"Shield": "",
 "Shimmy": "",
 "State": "",
 "Talk": "",
