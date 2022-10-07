@@ -1,7 +1,7 @@
 extends Spatial
 
 export var strength = 100 setget ,get_strength
-export var travel_speed = 8;
+export var travel_speed = 12;
 export var travel_curve: Curve
 export var travel_ramp_time: float = 1.0
 var target: Vector3 setget set_target

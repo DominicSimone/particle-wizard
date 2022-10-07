@@ -10,7 +10,7 @@ onready var shot_scene := preload("res://PlayerShot.tscn")
 
 var grav_ball
 var grav_out: bool = false
-var grav_cost: float = 1
+var grav_cost: float = 10
 var shot_cost: float = 2
 
 var health: float = 100
@@ -46,6 +46,7 @@ func update_ui():
 	ui.set_health(health)
 	ui.set_mana(mana)
 
+# TODO allow camera rotation with Q and E
 func movement(delta):
 	var dir = Vector3()
 	var inputMoveVector = Vector2()
@@ -77,14 +78,16 @@ func cast_shot(target):
 		mana -= shot_cost
 		var new_shot = shot_scene.instance()
 		get_parent().add_child(new_shot)
-		new_shot.translation = translation
-		new_shot.set_target(target)
+		# Hack y offset as enemy is off the ground so their shield doesn't deplete
+		# on lingering ground particles
+		new_shot.translation = translation + Vector3(0, 2, 0)
+		new_shot.set_target(target + Vector3(0, 2, 0))
 	else:
 		ui.not_enough_mana()
 
 func send_ball(target):
 	grav_out = true
-	grav_ball.target = target + Vector3(0, 0.5, 0)
+	grav_ball.target = target + Vector3(0, 1, 0)
 	grav_ball.translation = translation
 	grav_ball.visible = true
 

@@ -1,0 +1,66 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://particle scenes/draw pass.tres" type="CubeMesh" id=1]
+[ext_resource path="res://scripts/ParticleSpawner.gd" type="Script" id=2]
+[ext_resource path="res://shaders/particle_ring_emission.gdshader" type="Shader" id=3]
+[ext_resource path="res://particle scenes/high_initial_tex.tres" type="Texture" id=4]
+
+[sub_resource type="ShaderMaterial" id=49]
+shader = ExtResource( 3 )
+shader_param/direction = Vector3( 0, 0, 0 )
+shader_param/spread = 0.0
+shader_param/flatness = 1.0
+shader_param/initial_linear_velocity = 0.0
+shader_param/initial_angle = 0.0
+shader_param/angular_velocity = 0.0
+shader_param/orbit_velocity = 0.0
+shader_param/linear_accel = 0.0
+shader_param/radial_accel = 2.0
+shader_param/tangent_accel = 4.0
+shader_param/damping = 2.63
+shader_param/scale = 1.0
+shader_param/hue_variation = 0.0
+shader_param/anim_speed = 0.0
+shader_param/anim_offset = 0.0
+shader_param/initial_linear_velocity_random = 0.0
+shader_param/initial_angle_random = 0.0
+shader_param/angular_velocity_random = 0.0
+shader_param/orbit_velocity_random = 0.0
+shader_param/linear_accel_random = 0.0
+shader_param/radial_accel_random = 0.0
+shader_param/tangent_accel_random = 0.0
+shader_param/damping_random = 0.0
+shader_param/scale_random = 0.0
+shader_param/hue_variation_random = 0.0
+shader_param/anim_speed_random = 0.0
+shader_param/anim_offset_random = 0.0
+shader_param/lifetime_randomness = 0.0
+shader_param/ring_radius = 2.0
+shader_param/ring_height = 0.2
+shader_param/ring_inner_radius = 2.0
+shader_param/ring_axis = Vector3( 0, 1, 0 )
+shader_param/color_value = Color( 1, 1, 1, 1 )
+shader_param/trail_divisor = 1
+shader_param/gravity = Vector3( 0, -1e-06, 0 )
+shader_param/particle_collider_0 = null
+shader_param/particle_collider_1 = null
+shader_param/particle_collider_2 = null
+shader_param/particle_collider_3 = null
+shader_param/gravity_point = Plane( 0, 0, 0, 0 )
+shader_param/vp_size = 8
+shader_param/sectors = Vector2( 2, 2 )
+shader_param/radial_accel_texture = ExtResource( 4 )
+
+[node name="Particles" type="Particles"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0 )
+layers = 3
+emitting = false
+amount = 200
+lifetime = 3.0
+one_shot = true
+explosiveness = 0.95
+visibility_aabb = AABB( -500, -4, -500, 1000, 8, 1000 )
+local_coords = false
+process_material = SubResource( 49 )
+draw_pass_1 = ExtResource( 1 )
+script = ExtResource( 2 )

@@ -34,13 +34,15 @@ uniform vec4 color_value : hint_color;
 uniform int trail_divisor;
 uniform vec3 gravity;
 
+// --- Custom logic ---
+
 uniform vec4 particle_collider_0;
 uniform vec4 particle_collider_1;
 uniform vec4 particle_collider_2;
 uniform vec4 particle_collider_3;
 uniform vec4 gravity_point = vec4(0, 0, 0, 0);
 const float grav_damp_radius = 5.0;
-const float point_mass = 10.0;
+uniform float point_mass = 10.0;
 const float coord_step = 0.2;
 uniform int vp_size = 8;
 uniform vec2 sectors = vec2(2, 2);
@@ -56,6 +58,8 @@ vec3 to_viewport(in uint number, in float rand, in int sector) {
 	
 	return vec3(float(x - vp_size / 2) * coord_step, -10, float(y - vp_size / 2) * coord_step);
 }
+
+// --- End ---
 
 float rand_from_seed(inout uint seed) {
 	int k;
@@ -158,28 +162,72 @@ void vertex() {
 		vec3 crossDiff = cross(normalize(diff), normalize(gravity));
 		force += length(crossDiff) > 0.0 ? normalize(crossDiff) * ((tangent_accel + tex_tangent_accel) * mix(1.0, rand_from_seed(alt_seed), tangent_accel_random)) : vec3(0.0);
 		
+		// --- Custom logic ---
+
 		// apply point gravity
 		float dist_to_grav = distance(TRANSFORM[3].xyz, gravity_point.xyz);
 		float grav_force = gravity_point.a * point_mass / pow(dist_to_grav, 2);
 		force += grav_force * normalize(gravity_point.xyz - TRANSFORM[3].xyz);
+
+		// --- End ---
 		
 		// apply attractor forces
 		VELOCITY += force * DELTA;
+
+		// orbit velocity
+		if (damping + tex_damping > 0.0) {
+			float v = length(VELOCITY);
+			float damp = (damping + tex_damping) * mix(1.0, rand_from_seed(alt_seed), damping_random);
+			v -= damp * DELTA;
+			if (v < 0.0) {
+				VELOCITY = vec3(0.0);
+			} else {
+				VELOCITY = normalize(VELOCITY) * v;
+			}
+		}
 
 		float base_angle = (initial_angle + tex_angle) * mix(1.0, angle_rand, initial_angle_random);
 		base_angle += CUSTOM.y * LIFETIME * (angular_velocity + tex_angular_velocity) * mix(1.0, rand_from_seed(alt_seed) * 2.0 - 1.0, angular_velocity_random);
 		CUSTOM.x = base_angle * degree_to_rad;
 		CUSTOM.z = (anim_offset + tex_anim_offset) * mix(1.0, anim_offset_rand, anim_offset_random) + tv * (anim_speed + tex_anim_speed) * mix(1.0, rand_from_seed(alt_seed), anim_speed_random);
 	}
+	float tex_scale = 1.0;
+	float tex_hue_variation = 0.0;
+	float hue_rot_angle = (hue_variation + tex_hue_variation) * pi * 2.0 * mix(1.0, hue_rot_rand * 2.0 - 1.0, hue_variation_random);
+	float hue_rot_c = cos(hue_rot_angle);
+	float hue_rot_s = sin(hue_rot_angle);
+	mat4 hue_rot_mat = mat4(vec4(0.299, 0.587, 0.114, 0.0),
+			vec4(0.299, 0.587, 0.114, 0.0),
+			vec4(0.299, 0.587, 0.114, 0.0),
+			vec4(0.000, 0.000, 0.000, 1.0)) +
+		mat4(vec4(0.701, -0.587, -0.114, 0.0),
+			vec4(-0.299, 0.413, -0.114, 0.0),
+			vec4(-0.300, -0.588, 0.886, 0.0),
+			vec4(0.000, 0.000, 0.000, 0.0)) * hue_rot_c +
+		mat4(vec4(0.168, 0.330, -0.497, 0.0),
+			vec4(-0.328, 0.035,  0.292, 0.0),
+			vec4(1.250, -1.050, -0.203, 0.0),
+			vec4(0.000, 0.000, 0.000, 0.0)) * hue_rot_s;
+	COLOR = hue_rot_mat * color_value;
 
 	TRANSFORM[0].xyz = normalize(TRANSFORM[0].xyz);
 	TRANSFORM[1].xyz = normalize(TRANSFORM[1].xyz);
 	TRANSFORM[2].xyz = normalize(TRANSFORM[2].xyz);
+
+	float base_scale = tex_scale * mix(scale, 1.0, scale_random * scale_rand);
+	if (base_scale < 0.000001) {
+		base_scale = 0.000001;
+	}
+	TRANSFORM[0].xyz *= base_scale;
+	TRANSFORM[1].xyz *= base_scale;
+	TRANSFORM[2].xyz *= base_scale;
 	
+	// --- Custom logic ---
+
 	// Bounce particles off the ground (reflect when y <= 0)
 	if (TRANSFORM[3].y <= coord_step) {
 		TRANSFORM[3].y = coord_step;
-		VELOCITY.y = abs(VELOCITY.y) * 0.5;
+		VELOCITY.y = abs(VELOCITY.y) * 0.2;
 	}
 	
 	// Particle collider logic (convert to uniform array in 4.0 instead of distinct collider variables)
@@ -196,6 +244,8 @@ void vertex() {
 	if (distance(TRANSFORM[3].xyz, gravity_point.xyz) < coord_step * 2.0 && gravity_point.a > 0.0) {
 		ACTIVE = false;
 	}
+
+	// --- End ---
 	
 	if (CUSTOM.y > CUSTOM.w) {
 		ACTIVE = false;

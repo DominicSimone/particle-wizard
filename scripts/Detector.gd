@@ -1,9 +1,9 @@
 extends Area
 
-signal player_detection
+signal player_detection(body)
 
 func _ready() -> void:
 	Util.parent_hook(self, "player_detection")
 
 func _on_Area_body_entered(body: Node) -> void:
-	emit_signal("player_detection")
+	emit_signal("player_detection", body)

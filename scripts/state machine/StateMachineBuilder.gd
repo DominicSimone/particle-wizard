@@ -8,7 +8,7 @@ class_name SMBuilder
 	"state_name": [
 		[Behavior.new(), AnotherBehavior.new()],
 		{
-			"other state": [RandomChance.new(0.5)],
+			"other state": [Timed.new(10)],
 		}
 	],
 	"other_state": [
@@ -56,13 +56,14 @@ static func get_state_machine(identifier: String):
 	match identifier:
 		"debug_machine": return debug_machine()
 		"green_gem": return green_gem()
+		"red_gem": return red_gem()
+		"blue_gem": return blue_gem()
 	printerr("'", identifier, "' state machine not found.")
 
 # TODO
 static func green_gem():
 	return build({
-		"inactive": [
-			[],
+		"inactive": [ [],
 			{
 				"activation": [MatchEvent.new(EEvent.Types.PLAYER_DETECTION)]
 			}
@@ -74,18 +75,24 @@ static func green_gem():
 			}
 		],
 		"activated": [
-			[Shimmy.new(3, 0.5)],
+			[Shimmy.new(5, 0.5)],
 			{
 				"stop_and_shoot": [Timed.new(10), RandomChance.new(0.1)]
 			}
 		],
 		"stop_and_shoot": [
-			[Cast.new(preload("res://PlayerShot.tscn"), 0, 1)],
+			[Cast.new(preload("res://particle scenes/Lingering Arc.tscn"))],
 			{
 				"activated": [Timed.new(1.5)]
 			}
 		]
 	})
+
+static func red_gem():
+	return debug_machine()
+
+static func blue_gem():
+	return debug_machine()
 
 static func debug_machine():
 	return build({

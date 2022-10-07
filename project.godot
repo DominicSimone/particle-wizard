@@ -44,11 +44,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/EntityKnowledge.gd"
 }, {
-"base": "Behavior",
-"class": "Idle",
-"language": "GDScript",
-"path": "res://scripts/state machine/behaviors/Idle.gd"
-}, {
 "base": "Condition",
 "class": "MatchEvent",
 "language": "GDScript",
@@ -68,6 +63,11 @@ _global_script_classes=[ {
 "class": "ParticleCollider",
 "language": "GDScript",
 "path": "res://scripts/ParticleCollider.gd"
+}, {
+"base": "Particles",
+"class": "ParticleSpawner",
+"language": "GDScript",
+"path": "res://scripts/ParticleSpawner.gd"
 }, {
 "base": "Condition",
 "class": "RandomChance",
@@ -122,11 +122,11 @@ _global_script_class_icons={
 "Condition": "",
 "EEvent": "",
 "EntityKnowledge": "",
-"Idle": "",
 "MatchEvent": "",
 "NOf": "",
 "NoneOf": "",
 "ParticleCollider": "",
+"ParticleSpawner": "",
 "RandomChance": "",
 "SMBuilder": "",
 "Shield": "",

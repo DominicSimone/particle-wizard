@@ -11,8 +11,6 @@ var gravCount := 0
 var _vp_size: int
 var _sectors: Vector2
 
-
-
 func updateViewportShaderParams(vp_size: int, sectors: Vector2):
 	_vp_size = vp_size
 	_sectors = sectors
@@ -51,6 +49,10 @@ func registerParticleSpawner(object: Particles) -> int:
 	particleCount += 1
 	updateViewportShaderParams(_vp_size, _sectors)
 	return particleCount - 1
+
+func deregisterParticleSpawner(handle: int):
+	_particleSpawner.erase(handle)
+	particleCount -= 1
 
 func registerGravityPoint(object: Object) -> int:
 	print("Registered gravity point: ", object)

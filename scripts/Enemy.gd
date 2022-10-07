@@ -35,8 +35,10 @@ func _on_Enemy_body_entered(body: Node) -> void:
 func _on_shield_toggle(status: bool) -> void:
 	change_state(EEvent.Types.SHIELD_TOGGLE, status)
 
-func _on_player_detection() -> void:
+func _on_player_detection(body) -> void:
 	change_state(EEvent.Types.PLAYER_DETECTION, null)
+	knowledge.known_target = true
+	knowledge.target = body
 
 func _on_shield_hit() -> void:
 	change_state(EEvent.Types.SHIELD_HIT, null)
