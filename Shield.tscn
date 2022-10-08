@@ -8,6 +8,7 @@
 radius = 1.50484
 
 [sub_resource type="ShaderMaterial" id=41]
+resource_local_to_scene = true
 shader = ExtResource( 3 )
 shader_param/albedo = Color( 0.52549, 0.607843, 0.831373, 1 )
 shader_param/emission_color = Color( 0.415686, 0.341176, 0.368627, 1 )
@@ -17,6 +18,7 @@ shader_param/uv_scale = null
 shader_param/uv_offset = null
 
 [sub_resource type="SphereMesh" id=40]
+resource_local_to_scene = true
 material = SubResource( 41 )
 radius = 1.5
 height = 3.0

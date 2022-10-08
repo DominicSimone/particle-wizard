@@ -1,7 +1,8 @@
-extends Spatial
+class_name Enemy extends Spatial
 
 export var max_health: float
 export var ai: String = "green_gem"
+export var color: Color = Color.green
 onready var health := max_health
 onready var shield_scene := preload("res://Shield.tscn")
 var knowledge := EntityKnowledge.new()
@@ -9,8 +10,12 @@ var state: State
 var active = false
 
 func _ready() -> void:
+	set_color(color)
 	state = SMBuilder.get_state_machine(ai)
 	state.on_entry(self)
+
+func set_color(color: Color):
+	$gem.get_active_material(0).albedo_color = color
 
 func change_state(type: int, payload):
 	var next_state = state.evaluate(type, payload)

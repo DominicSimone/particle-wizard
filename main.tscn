@@ -1,12 +1,10 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://textures/temp ground.png" type="Texture" id=1]
 [ext_resource path="res://scripts/PlayerController.gd" type="Script" id=2]
-[ext_resource path="res://scripts/Enemy.gd" type="Script" id=3]
+[ext_resource path="res://Enemy.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scripts/ParticleCollisions.gd" type="Script" id=4]
 [ext_resource path="res://scripts/MainUI.gd" type="Script" id=7]
-[ext_resource path="res://Detector.tscn" type="PackedScene" id=9]
-[ext_resource path="res://objects/gem.obj" type="ArrayMesh" id=10]
 [ext_resource path="res://scripts/ParticleCollider.gd" type="Script" id=11]
 
 [sub_resource type="StyleBoxFlat" id=32]
@@ -54,45 +52,6 @@ extents = Vector3( 128.184, 127.235, 0.267175 )
 
 [sub_resource type="BoxShape" id=47]
 extents = Vector3( 0.476559, 0.928984, 0.479322 )
-
-[sub_resource type="SpatialMaterial" id=45]
-albedo_color = Color( 0.14902, 0.917647, 0.478431, 1 )
-roughness = 0.15
-
-[sub_resource type="SphereShape" id=33]
-radius = 0.910449
-
-[sub_resource type="Animation" id=38]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath("gem:rotation_degrees")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector3( 0, 0, 0 ) ]
-}
-
-[sub_resource type="Animation" id=39]
-resource_name = "Spin"
-length = 3.0
-loop = true
-tracks/0/type = "value"
-tracks/0/path = NodePath("gem:rotation_degrees")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 3 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Vector3( 0, 0, 0 ), Vector3( 0, -72, 0 ) ]
-}
 
 [node name="Spatial" type="Spatial"]
 
@@ -262,31 +221,20 @@ size = 1.1
 [node name="CollisionShape" type="CollisionShape" parent="Player"]
 shape = SubResource( 47 )
 
-[node name="Enemy" type="Area" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -9.65013, 2.93734, -7.57665 )
-collision_layer = 2
-input_ray_pickable = false
-script = ExtResource( 3 )
-max_health = 10.0
+[node name="Green Gem" parent="." instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.4002, 2.93734, -6.66589 )
 
-[node name="Detector" parent="Enemy" instance=ExtResource( 9 )]
+[node name="Red Gem" parent="." instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 11.4727, 2.93734, -4.54219 )
+ai = "red_gem"
+color = Color( 1, 0, 0, 1 )
 
-[node name="gem" type="MeshInstance" parent="Enemy"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.199103, 0 )
-mesh = ExtResource( 10 )
-skeleton = NodePath("../..")
-material/0 = SubResource( 45 )
-
-[node name="CollisionShape" type="CollisionShape" parent="Enemy"]
-shape = SubResource( 33 )
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Enemy"]
-autoplay = "Spin"
-anims/RESET = SubResource( 38 )
-anims/Spin = SubResource( 39 )
+[node name="Blue Gem" parent="." instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.69594, 2.93734, 12.8141 )
+ai = "blue_gem"
+color = Color( 0.243137, 0.698039, 1, 1 )
 
 [connection signal="pressed" from="Control/Game Over/Button" to="Control" method="_on_Button_pressed"]
 [connection signal="toggled" from="Control/Game Over/Button" to="Control" method="_on_Button_toggled"]
 [connection signal="input_event" from="Ground/StaticBody" to="Player" method="_on_StaticBody_input_event"]
 [connection signal="hit" from="Player/ParticleCollider" to="Player" method="_on_ParticleCollider_hit"]
-[connection signal="body_entered" from="Enemy" to="Enemy" method="_on_Enemy_body_entered"]

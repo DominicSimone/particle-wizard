@@ -71,19 +71,19 @@ static func green_gem():
 		"activation": [
 			[CallFunc.new("add_shield"), CallFunc.new("set_active")],
 			{
-				"activated": [Timed.new(0)]
+				"stop_and_shoot": [Timed.new(0.1)]
 			}
 		],
-		"activated": [
+		"shimmy": [
 			[Shimmy.new(5, 0.5)],
 			{
-				"stop_and_shoot": [Timed.new(10), RandomChance.new(0.1)]
+				"stop_and_shoot": [Timed.new(10), RandomChance.new(0.5)]
 			}
 		],
 		"stop_and_shoot": [
 			[Cast.new(preload("res://particle scenes/Lingering Arc.tscn"))],
 			{
-				"activated": [Timed.new(1.5)]
+				"shimmy": [Timed.new(1.5)]
 			}
 		]
 	})
