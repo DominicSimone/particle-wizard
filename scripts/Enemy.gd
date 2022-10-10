@@ -35,6 +35,7 @@ func _on_Enemy_body_entered(body: Node) -> void:
 		change_state(EEvent.Types.ON_HIT, 1)
 		body.queue_free()
 		if health <= 0:
+			GameState.enemy_death()
 			call_deferred("queue_free")
 
 func _on_shield_toggle(status: bool) -> void:
@@ -51,8 +52,8 @@ func _on_shield_hit() -> void:
 # Used in state machine calls
 func add_shield():
 	var shield = shield_scene.instance()
-	
 	add_child(shield)
 
 func set_active():
+	GameState.enemy_active()
 	active = true

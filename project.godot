@@ -154,6 +154,7 @@ config/icon="res://textures/temp ground.png"
 
 Window="*res://scripts/Window.gd"
 EntityManager="*res://scripts/EntityManager.gd"
+GameState="*res://scripts/GameState.gd"
 
 [display]
 

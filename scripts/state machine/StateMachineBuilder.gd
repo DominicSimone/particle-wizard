@@ -97,7 +97,7 @@ static func blue_gem():
 static func debug_machine():
 	return build({
 		"start": [
-			[Talk.new(["Greetings, cowards."])],
+			[Talk.new(["Greetings, cowards."]), CallFunc.new("set_active")],
 			{
 				"shimmy": [Timed.new(1)]
 			}

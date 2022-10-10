@@ -10,7 +10,7 @@ onready var shot_scene := preload("res://PlayerShot.tscn")
 
 var grav_ball
 var grav_out: bool = false
-var grav_cost: float = 10
+var grav_cost: float = 1
 var shot_cost: float = 2
 
 var health: float = 100
@@ -22,9 +22,9 @@ var alive := true
 func _process(delta):
 	if health < 0:
 		if alive:
-			ui.game_over()
-			pass
+			GameState.player_death()
 		alive = false
+		set_process(false)
 		return
 	update_ui()
 	movement(delta)

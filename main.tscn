@@ -166,6 +166,52 @@ __meta__ = {
 "_edit_use_anchors_": true
 }
 
+[node name="Victory" type="Control" parent="Control"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="ColorRect" type="ColorRect" parent="Control/Victory"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.513726, 0.501961, 0.447059, 0.509804 )
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Control/Victory"]
+anchor_left = 0.316667
+anchor_top = 0.3175
+anchor_right = 0.695
+anchor_bottom = 0.4275
+bbcode_enabled = true
+bbcode_text = "[b][wave][rainbow freq=0.3][center]VICTORY[/center][/rainbow][/wave][/b]"
+tab_size = 0
+text = "VICTORY"
+fit_content_height = true
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="Label" type="Label" parent="Control/Victory"]
+anchor_top = 0.6
+anchor_right = 1.0
+anchor_bottom = 0.67
+text = "00:00:00"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="Button" type="Button" parent="Control/Victory"]
+anchor_left = 0.445
+anchor_top = 0.6925
+anchor_right = 0.566667
+anchor_bottom = 0.7425
+text = "Restart"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
 [node name="Ground" type="Sprite3D" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0 )
 pixel_size = 0.5
@@ -235,6 +281,6 @@ ai = "blue_gem"
 color = Color( 0.243137, 0.698039, 1, 1 )
 
 [connection signal="pressed" from="Control/Game Over/Button" to="Control" method="_on_Button_pressed"]
-[connection signal="toggled" from="Control/Game Over/Button" to="Control" method="_on_Button_toggled"]
+[connection signal="pressed" from="Control/Victory/Button" to="Control" method="_on_Button_pressed"]
 [connection signal="input_event" from="Ground/StaticBody" to="Player" method="_on_StaticBody_input_event"]
 [connection signal="hit" from="Player/ParticleCollider" to="Player" method="_on_ParticleCollider_hit"]
