@@ -31,6 +31,9 @@ func get_strength():
 func _ready() -> void:
 	EM_handle = EntityManager.registerGravityPoint(self)
 
+func _exit_tree() -> void:
+	EntityManager.deregisterGravityPoint(EM_handle)
+
 func _process(delta: float):
 	if travelling:
 		travel_time += delta

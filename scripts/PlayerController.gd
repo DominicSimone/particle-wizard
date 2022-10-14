@@ -2,6 +2,7 @@ extends Spatial
 
 export var speed: float = 10
 export var ui_path: NodePath
+export var rotate_speed: float = 2.0
 onready var ui: Control = get_node(ui_path)
 
 onready var camera = get_node("Camera")
@@ -46,18 +47,20 @@ func update_ui():
 	ui.set_health(health)
 	ui.set_mana(mana)
 
-# TODO allow camera rotation with Q and E
-func movement(delta):
-	var dir = Vector3()
-	var inputMoveVector = Vector2()
 
+func movement(delta):
+	var camera_rotation_direction = Input.get_action_strength("rotate_left") - Input.get_action_strength("rotate_right")
+	var camera_rotation = camera_rotation_direction * delta * rotate_speed
+	camera.global_translation = global_translation + (camera.global_translation - global_translation).rotated(Vector3.UP, camera_rotation)
+	camera.look_at(global_translation, Vector3.UP)
 	var aim = camera.transform.basis
 	
+	var inputMoveVector = Vector2()
 	inputMoveVector.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
 	inputMoveVector.y = Input.get_action_strength("move_forward") - Input.get_action_strength("move_backward")
 	inputMoveVector = inputMoveVector.normalized()
 	
-	dir += -aim.z * inputMoveVector.y
+	var dir = -aim.z * inputMoveVector.y
 	dir += aim.x * inputMoveVector.x
 	dir.y = 0
 	dir = dir.normalized() * speed * delta

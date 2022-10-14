@@ -34,7 +34,7 @@ func updateParticleUniforms():
 			particleSpawner.process_material.set_shader_param("gravity_point", uniform)
 
 func registerParticleCollider(object: Node) -> int:
-	print("Registered particle collider: ", object)
+#	print("Registered particle collider: ", object)
 	_particleColliders[colliderCount] = object
 	colliderCount += 1
 	return colliderCount - 1
@@ -44,7 +44,7 @@ func deregisterParticleCollider(handle: int):
 	colliderCount -= 1
 
 func registerParticleSpawner(object: Particles) -> int:
-	print("Registered particle spawner: ", object)
+#	print("Registered particle spawner: ", object)
 	_particleSpawner[particleCount] = object
 	particleCount += 1
 	updateViewportShaderParams(_vp_size, _sectors)
@@ -55,10 +55,14 @@ func deregisterParticleSpawner(handle: int):
 	particleCount -= 1
 
 func registerGravityPoint(object: Object) -> int:
-	print("Registered gravity point: ", object)
+#	print("Registered gravity point: ", object)
 	_gravityPoints[gravCount] = object
 	gravCount += 1
 	return gravCount - 1
+
+func deregisterGravityPoint(handle: int):
+	_gravityPoints.erase(handle)
+	gravCount -= 1
 
 func particleCollisions(collision_data: Array):
 	var i = 0

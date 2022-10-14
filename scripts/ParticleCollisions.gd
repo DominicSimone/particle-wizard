@@ -38,7 +38,7 @@ func _ready() -> void:
 	for sector_num in sectors.x * sectors.y:
 		data.append(0)
 	
-	print("Collision sectors: ", data)
+#	print("Collision sectors: ", data)
 
 func getSector(x: int, y: int) -> int:
 	return (y / y_sector_size) * y_sectors + x / x_sector_size
